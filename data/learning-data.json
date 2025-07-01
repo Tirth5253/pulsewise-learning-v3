@@ -1,0 +1,420 @@
+{
+  "subjects": [
+    {
+      "id": "ux-design",
+      "title": "UX Design Fundamentals",
+      "description": "Master the core principles of user experience design",
+      "image": "/placeholder.svg?height=80&width=80",
+      "category": "Design",
+      "totalLessons": 3,
+      "color": "from-blue-50 to-blue-100"
+    },
+    {
+      "id": "ui-patterns",
+      "title": "UI Design Patterns",
+      "description": "Learn essential interface design patterns and components",
+      "image": "/placeholder.svg?height=80&width=80",
+      "category": "Design",
+      "totalLessons": 2,
+      "color": "from-purple-50 to-purple-100"
+    },
+    {
+      "id": "user-research",
+      "title": "User Research Methods",
+      "description": "Discover effective techniques for understanding users",
+      "image": "/placeholder.svg?height=80&width=80",
+      "category": "Research",
+      "totalLessons": 2,
+      "color": "from-pink-50 to-pink-100"
+    },
+    {
+      "id": "accessibility",
+      "title": "Web Accessibility",
+      "description": "Build inclusive digital experiences for everyone",
+      "image": "/placeholder.svg?height=80&width=80",
+      "category": "Development",
+      "totalLessons": 2,
+      "color": "from-indigo-50 to-indigo-100"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "ux-intro",
+      "subjectId": "ux-design",
+      "title": "Introduction to UX Design",
+      "description": "Understanding the fundamentals of user experience",
+      "order": 1,
+      "totalCards": 5
+    },
+    {
+      "id": "user-personas",
+      "subjectId": "ux-design",
+      "title": "Creating User Personas",
+      "description": "Learn to develop detailed user personas",
+      "order": 2,
+      "totalCards": 4
+    },
+    {
+      "id": "wireframing",
+      "subjectId": "ux-design",
+      "title": "Wireframing Basics",
+      "description": "Master the art of creating effective wireframes",
+      "order": 3,
+      "totalCards": 4
+    },
+    {
+      "id": "ui-components",
+      "subjectId": "ui-patterns",
+      "title": "Common UI Components",
+      "description": "Explore essential interface components",
+      "order": 1,
+      "totalCards": 5
+    },
+    {
+      "id": "navigation-patterns",
+      "subjectId": "ui-patterns",
+      "title": "Navigation Patterns",
+      "description": "Design intuitive navigation systems",
+      "order": 2,
+      "totalCards": 4
+    },
+    {
+      "id": "user-interviews",
+      "subjectId": "user-research",
+      "title": "User Interviews",
+      "description": "Conduct effective user interviews",
+      "order": 1,
+      "totalCards": 4
+    },
+    {
+      "id": "usability-testing",
+      "subjectId": "user-research",
+      "title": "Usability Testing",
+      "description": "Plan and execute usability tests",
+      "order": 2,
+      "totalCards": 4
+    },
+    {
+      "id": "wcag-guidelines",
+      "subjectId": "accessibility",
+      "title": "WCAG Guidelines",
+      "description": "Understanding web accessibility standards",
+      "order": 1,
+      "totalCards": 4
+    },
+    {
+      "id": "accessible-design",
+      "subjectId": "accessibility",
+      "title": "Accessible Design Patterns",
+      "description": "Design patterns for inclusive experiences",
+      "order": 2,
+      "totalCards": 4
+    }
+  ],
+  "cards": [
+    {
+      "id": "card-1",
+      "lessonId": "ux-intro",
+      "question": "What is User Experience (UX) Design?",
+      "answer": "UX Design is the process of creating products that provide meaningful and relevant experiences to users. It involves the design of the entire process of acquiring and integrating the product, including aspects of branding, design, usability, and function.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 1
+    },
+    {
+      "id": "card-2",
+      "lessonId": "ux-intro",
+      "question": "What are the key principles of UX Design?",
+      "answer": "The key principles include: User-centered design, Usability, Accessibility, Consistency, Simplicity, and Feedback. These principles guide designers to create intuitive and effective user experiences.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 2
+    },
+    {
+      "id": "card-3",
+      "lessonId": "ux-intro",
+      "question": "What is the difference between UX and UI?",
+      "answer": "UX (User Experience) focuses on the overall feel and journey of the user, while UI (User Interface) focuses on the visual and interactive elements. UX is about solving problems, UI is about creating beautiful, intuitive interfaces.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 3
+    },
+    {
+      "id": "card-4",
+      "lessonId": "ux-intro",
+      "question": "What is Design Thinking?",
+      "answer": "Design Thinking is a human-centered approach to innovation that integrates the needs of people, the possibilities of technology, and requirements for business success. It follows five stages: Empathize, Define, Ideate, Prototype, and Test.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 4
+    },
+    {
+      "id": "card-5",
+      "lessonId": "ux-intro",
+      "question": "Why is user research important?",
+      "answer": "User research helps understand user behaviors, needs, and motivations through observation techniques, task analysis, and feedback methodologies. It ensures that design decisions are based on real user data rather than assumptions.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 5
+    },
+    {
+      "id": "card-6",
+      "lessonId": "user-personas",
+      "question": "What is a User Persona?",
+      "answer": "A user persona is a fictional character that represents a segment of your target audience. It's based on real data and research about your existing and potential customers, including their demographics, behaviors, motivations, and goals.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 1
+    },
+    {
+      "id": "card-7",
+      "lessonId": "user-personas",
+      "question": "How do you create effective personas?",
+      "answer": "Start with user research, identify patterns in user behavior, create detailed profiles with names and photos, include goals and pain points, and validate with real user data. Keep personas realistic and actionable.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 2
+    },
+    {
+      "id": "card-8",
+      "lessonId": "user-personas",
+      "question": "How many personas should you create?",
+      "answer": "Typically 3-5 primary personas are sufficient for most projects. Too few may miss important user segments, while too many can dilute focus and make decision-making difficult.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 3
+    },
+    {
+      "id": "card-9",
+      "lessonId": "user-personas",
+      "question": "When should personas be updated?",
+      "answer": "Personas should be reviewed and updated regularly, especially when you gather new user research, launch new features, or notice changes in user behavior patterns. Treat them as living documents.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 4
+    },
+    {
+      "id": "card-10",
+      "lessonId": "wireframing",
+      "question": "What is wireframing?",
+      "answer": "Wireframing is the process of creating basic structural blueprints of web pages or app screens. They show the layout, content hierarchy, and functionality without focusing on visual design details.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 1
+    },
+    {
+      "id": "card-11",
+      "lessonId": "wireframing",
+      "question": "What are the types of wireframes?",
+      "answer": "Low-fidelity wireframes are basic sketches, mid-fidelity include more detail and structure, and high-fidelity wireframes are detailed with specific content and interactions. Choose based on project needs.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 2
+    },
+    {
+      "id": "card-12",
+      "lessonId": "wireframing",
+      "question": "What tools are used for wireframing?",
+      "answer": "Popular wireframing tools include Figma, Sketch, Adobe XD, Balsamiq, and even pen and paper. Choose tools that match your fidelity needs and team collaboration requirements.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 3
+    },
+    {
+      "id": "card-13",
+      "lessonId": "wireframing",
+      "question": "Best practices for wireframing?",
+      "answer": "Start simple, focus on functionality over aesthetics, use consistent elements, include annotations for clarity, test with users early, and iterate based on feedback.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 4
+    },
+    {
+      "id": "card-14",
+      "lessonId": "ui-components",
+      "question": "What are UI components?",
+      "answer": "UI components are reusable interface elements like buttons, forms, navigation menus, and cards. They provide consistency across an application and speed up the design and development process.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 1
+    },
+    {
+      "id": "card-15",
+      "lessonId": "ui-components",
+      "question": "What makes a good button design?",
+      "answer": "Good buttons are clearly clickable, have sufficient size and padding, use appropriate colors for their function, include clear labels, and provide visual feedback on interaction.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 2
+    },
+    {
+      "id": "card-16",
+      "lessonId": "ui-components",
+      "question": "How do you design effective forms?",
+      "answer": "Use clear labels, logical grouping, appropriate input types, helpful error messages, and minimize the number of required fields. Make the form completion process as smooth as possible.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 3
+    },
+    {
+      "id": "card-17",
+      "lessonId": "ui-components",
+      "question": "What are design tokens?",
+      "answer": "Design tokens are the visual design atoms of a design system. They store design decisions like colors, typography, spacing, and shadows in a format that can be used across platforms.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 4
+    },
+    {
+      "id": "card-18",
+      "lessonId": "ui-components",
+      "question": "Why use component libraries?",
+      "answer": "Component libraries ensure consistency, speed up development, reduce maintenance overhead, improve collaboration between design and development teams, and provide a single source of truth.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 5
+    },
+    {
+      "id": "card-19",
+      "lessonId": "navigation-patterns",
+      "question": "What are common navigation patterns?",
+      "answer": "Common patterns include top navigation bars, sidebar navigation, breadcrumbs, tabs, hamburger menus, and bottom navigation. Each serves different use cases and screen sizes.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 1
+    },
+    {
+      "id": "card-20",
+      "lessonId": "navigation-patterns",
+      "question": "When to use hamburger menus?",
+      "answer": "Hamburger menus work well for mobile interfaces with limited space, but should be used carefully on desktop. Consider the trade-off between space saving and discoverability.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 2
+    },
+    {
+      "id": "card-21",
+      "lessonId": "navigation-patterns",
+      "question": "What are breadcrumbs?",
+      "answer": "Breadcrumbs show users their current location within a website's hierarchy and provide a way to navigate back to parent pages. They're especially useful for deep site structures.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 3
+    },
+    {
+      "id": "card-22",
+      "lessonId": "navigation-patterns",
+      "question": "How to design mobile navigation?",
+      "answer": "Prioritize important items, use thumb-friendly touch targets, consider bottom navigation for frequently used items, and ensure navigation is accessible with one hand.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 4
+    },
+    {
+      "id": "card-23",
+      "lessonId": "user-interviews",
+      "question": "What are user interviews?",
+      "answer": "User interviews are one-on-one conversations with users to understand their needs, behaviors, and motivations. They provide qualitative insights that inform design decisions.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 1
+    },
+    {
+      "id": "card-24",
+      "lessonId": "user-interviews",
+      "question": "How to prepare for user interviews?",
+      "answer": "Define clear objectives, prepare open-ended questions, recruit representative participants, choose a comfortable setting, and plan for recording and note-taking.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 2
+    },
+    {
+      "id": "card-25",
+      "lessonId": "user-interviews",
+      "question": "What questions should you ask?",
+      "answer": "Ask about user goals, current processes, pain points, and preferences. Use 'how' and 'why' questions to dig deeper. Avoid leading questions that might bias responses.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 3
+    },
+    {
+      "id": "card-26",
+      "lessonId": "user-interviews",
+      "question": "How to analyze interview data?",
+      "answer": "Look for patterns across interviews, identify common themes and pain points, create user journey maps, and translate insights into actionable design recommendations.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 4
+    },
+    {
+      "id": "card-27",
+      "lessonId": "usability-testing",
+      "question": "What is usability testing?",
+      "answer": "Usability testing involves observing users as they attempt to complete tasks with your product. It reveals usability problems and provides insights for improvement.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 1
+    },
+    {
+      "id": "card-28",
+      "lessonId": "usability-testing",
+      "question": "Types of usability testing?",
+      "answer": "Moderated vs. unmoderated, remote vs. in-person, and qualitative vs. quantitative testing. Each type serves different research goals and resource constraints.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 2
+    },
+    {
+      "id": "card-29",
+      "lessonId": "usability-testing",
+      "question": "How many users to test with?",
+      "answer": "Jakob Nielsen suggests 5 users can find 85% of usability problems. However, the number depends on your goals, user diversity, and available resources.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 3
+    },
+    {
+      "id": "card-30",
+      "lessonId": "usability-testing",
+      "question": "How to conduct usability tests?",
+      "answer": "Create realistic tasks, observe without interfering, encourage thinking aloud, take detailed notes, and focus on user behavior rather than opinions.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 4
+    },
+    {
+      "id": "card-31",
+      "lessonId": "wcag-guidelines",
+      "question": "What is WCAG?",
+      "answer": "WCAG (Web Content Accessibility Guidelines) provides standards for making web content accessible to people with disabilities. It's organized around four principles: Perceivable, Operable, Understandable, and Robust.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 1
+    },
+    {
+      "id": "card-32",
+      "lessonId": "wcag-guidelines",
+      "question": "What are WCAG conformance levels?",
+      "answer": "WCAG has three levels: A (minimum), AA (standard), and AAA (enhanced). Most organizations aim for AA compliance as it balances accessibility with practical implementation.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 2
+    },
+    {
+      "id": "card-33",
+      "lessonId": "wcag-guidelines",
+      "question": "What is color contrast?",
+      "answer": "Color contrast refers to the difference in luminance between text and background colors. WCAG AA requires a contrast ratio of at least 4.5:1 for normal text and 3:1 for large text.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 3
+    },
+    {
+      "id": "card-34",
+      "lessonId": "wcag-guidelines",
+      "question": "Why is keyboard navigation important?",
+      "answer": "Many users rely on keyboards instead of mice due to motor disabilities. All interactive elements must be accessible via keyboard, with clear focus indicators and logical tab order.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 4
+    },
+    {
+      "id": "card-35",
+      "lessonId": "accessible-design",
+      "question": "What are accessible design patterns?",
+      "answer": "Accessible design patterns are proven solutions for common interface elements that work well for users with disabilities. They include proper heading structure, form labels, and ARIA attributes.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 1
+    },
+    {
+      "id": "card-36",
+      "lessonId": "accessible-design",
+      "question": "How to design for screen readers?",
+      "answer": "Use semantic HTML, provide alt text for images, use proper heading hierarchy, include skip links, and test with actual screen reader software like NVDA or JAWS.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 2
+    },
+    {
+      "id": "card-37",
+      "lessonId": "accessible-design",
+      "question": "What is focus management?",
+      "answer": "Focus management ensures keyboard users can navigate efficiently through your interface. It includes visible focus indicators, logical tab order, and proper focus handling in dynamic content.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 3
+    },
+    {
+      "id": "card-38",
+      "lessonId": "accessible-design",
+      "question": "How to make forms accessible?",
+      "answer": "Use proper labels, group related fields, provide clear error messages, use fieldsets for radio buttons, and ensure form validation is announced to screen readers.",
+      "image": "/placeholder.svg?height=120&width=120",
+      "order": 4
+    }
+  ]
+}
