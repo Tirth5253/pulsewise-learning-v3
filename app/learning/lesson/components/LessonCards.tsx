@@ -1,96 +1,124 @@
-"use client"
-import { useState, useCallback, useRef, useMemo } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowRight, ArrowLeft, ChevronLeft, Menu } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import Sidebar from "../../subject/components/Sidebar"
-import SwipeableCard, { type SwipeableCardRef } from "./SwipeableCard"
-import learningData from "../../../../data/learning-data.json"
+"use client";
+import { useState, useCallback, useRef, useMemo } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, ArrowLeft, ChevronLeft, Menu } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import Sidebar from "../../subject/components/Sidebar";
+import SwipeableCard, { type SwipeableCardRef } from "./SwipeableCard";
+import learningData from "../../../../data/learning-data.json";
 
 interface Subject {
-  id: string
-  title: string
-  color: string
+  id: string;
+  title: string;
+  color: string;
 }
 
 interface Lesson {
-  id: string
-  subjectId: string
-  title: string
-  description: string
-  totalCards: number
+  id: string;
+  subjectId: string;
+  title: string;
+  description: string;
+  totalCards: number;
 }
 
 interface LessonCard {
-  id: string
-  lessonId: string
-  question: string
-  answer: string
-  image: string
-  order: number
+  id: string;
+  lessonId: string;
+  question: string;
+  answer: string;
+  image: string;
+  order: number;
 }
 
 interface LessonCardsProps {
-  lesson: Lesson
-  subject: Subject
-  cards: LessonCard[]
+  lesson: Lesson;
+  subject: Subject;
+  cards: LessonCard[];
 }
 
-export default function LessonCards({ lesson, subject, cards: initialCards }: LessonCardsProps) {
-  const [currentCardIndex, setCurrentCardIndex] = useState(0)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const swipeableCardRef = useRef<SwipeableCardRef>(null)
+export default function LessonCards({
+  lesson,
+  subject,
+  cards: initialCards,
+}: LessonCardsProps) {
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const swipeableCardRef = useRef<SwipeableCardRef>(null);
+  const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(
+    null
+  );
 
-  const allSubjects = learningData.subjects
-  const sortedCards = useMemo(() => initialCards.sort((a, b) => a.order - b.order), [initialCards])
+  const allSubjects = learningData.subjects;
+  const sortedCards = useMemo(
+    () => initialCards.sort((a, b) => a.order - b.order),
+    [initialCards]
+  );
 
   const moveToNextCard = useCallback(() => {
-    if (isAnimating) return
+    if (isAnimating) return;
 
-    setIsAnimating(true)
-    setCurrentCardIndex((prev) => (prev + 1) % sortedCards.length)
+    setIsAnimating(true);
+    setCurrentCardIndex((prev) => (prev + 1) % sortedCards.length);
 
     // Save progress
-    const savedProgress = localStorage.getItem("learning-progress") || "{}"
-    const allProgress = JSON.parse(savedProgress)
+    const savedProgress = localStorage.getItem("learning-progress") || "{}";
+    const allProgress = JSON.parse(savedProgress);
     if (!allProgress[subject.id]) {
-      allProgress[subject.id] = {}
+      allProgress[subject.id] = {};
     }
 
     // Mark as completed when viewed all cards
-    const viewedCards = currentCardIndex + 1
+    const viewedCards = currentCardIndex + 1;
     if (viewedCards >= sortedCards.length) {
-      allProgress[subject.id][lesson.id] = true
-      localStorage.setItem("learning-progress", JSON.stringify(allProgress))
+      allProgress[subject.id][lesson.id] = true;
+      localStorage.setItem("learning-progress", JSON.stringify(allProgress));
     }
 
     setTimeout(() => {
-      setIsAnimating(false)
-    }, 350) // Match the transition duration
-  }, [isAnimating, currentCardIndex, sortedCards.length, subject.id, lesson.id])
+      setIsAnimating(false);
+    }, 350); // Match the transition duration
+  }, [
+    isAnimating,
+    currentCardIndex,
+    sortedCards.length,
+    subject.id,
+    lesson.id,
+  ]);
 
   const moveToPrevCard = useCallback(() => {
-    if (isAnimating) return
+    if (isAnimating) return;
 
-    setIsAnimating(true)
-    setCurrentCardIndex((prev) => (prev - 1 + sortedCards.length) % sortedCards.length)
+    setIsAnimating(true);
+    setCurrentCardIndex(
+      (prev) => (prev - 1 + sortedCards.length) % sortedCards.length
+    );
 
     setTimeout(() => {
-      setIsAnimating(false)
-    }, 350) // Match the transition duration
-  }, [isAnimating, sortedCards.length])
+      setIsAnimating(false);
+    }, 350); // Match the transition duration
+  }, [isAnimating, sortedCards.length]);
 
   const handleNextWithSwipe = useCallback(() => {
-    if (isAnimating) return
-    swipeableCardRef.current?.triggerSwipe("right")
-  }, [isAnimating])
+    if (isAnimating) return;
+    swipeableCardRef.current?.triggerSwipe("right");
+  }, [isAnimating]);
 
   const handlePrevWithSwipe = useCallback(() => {
-    if (isAnimating) return
-    swipeableCardRef.current?.triggerSwipe("left")
-  }, [isAnimating])
+    if (isAnimating) return;
+    swipeableCardRef.current?.triggerSwipe("left");
+  }, [isAnimating]);
+
+  // Track swipe direction on drag start
+  const handleSwipeStart = useCallback((direction: "left" | "right") => {
+    setSwipeDirection(direction);
+  }, []);
+
+  // Reset swipe direction after animation
+  const handleSwipeEnd = useCallback(() => {
+    setSwipeDirection(null);
+  }, []);
 
   const cardColors = [
     "from-blue-500 to-blue-600",
@@ -98,22 +126,46 @@ export default function LessonCards({ lesson, subject, cards: initialCards }: Le
     "from-pink-500 to-pink-600",
     "from-indigo-500 to-indigo-600",
     "from-cyan-500 to-cyan-600",
-  ]
+  ];
 
-  // Create deck of cards - current card + next 3 cards for stacking effect
+  // Create deck of cards - dynamically based on swipe direction
   const deckCards = useMemo(() => {
-    const deck = []
-    for (let i = 0; i < Math.min(4, sortedCards.length); i++) {
-      const cardIndex = (currentCardIndex + i) % sortedCards.length
-      deck.push({
-        ...sortedCards[cardIndex],
-        deckIndex: i,
-      })
+    const deck = [];
+    if (swipeDirection === "left") {
+      // Swiping left: show previous cards
+      for (let i = 0; i < Math.min(4, sortedCards.length); i++) {
+        const cardIndex =
+          (currentCardIndex - i + sortedCards.length) % sortedCards.length;
+        deck.push({
+          ...sortedCards[cardIndex],
+          deckIndex: i,
+        });
+      }
+    } else if (swipeDirection === "right") {
+      // Swiping right: show next cards
+      for (let i = 0; i < Math.min(4, sortedCards.length); i++) {
+        const cardIndex = (currentCardIndex + i) % sortedCards.length;
+        deck.push({
+          ...sortedCards[cardIndex],
+          deckIndex: i,
+        });
+      }
+    } else {
+      // Default: show previous cards (like before)
+      for (let i = 0; i < Math.min(4, sortedCards.length); i++) {
+        const cardIndex =
+          (currentCardIndex - i + sortedCards.length) % sortedCards.length;
+        deck.push({
+          ...sortedCards[cardIndex],
+          deckIndex: i,
+        });
+      }
     }
-    return deck
-  }, [currentCardIndex, sortedCards])
+    deck.reverse();
+    return deck;
+  }, [currentCardIndex, sortedCards, swipeDirection]);
 
-  const currentProgress = currentCardIndex + 1
+  const currentProgress = currentCardIndex + 1;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex flex-col overflow-hidden">
@@ -151,7 +203,9 @@ export default function LessonCards({ lesson, subject, cards: initialCards }: Le
               <Menu className="w-6 h-6" />
             </button>
             <div className="text-center flex-1">
-              <h1 className="text-xl md:text-2xl font-bold text-gray-900 truncate">{lesson.title}</h1>
+              <h1 className="text-xl md:text-2xl font-bold text-gray-900 truncate">
+                {lesson.title}
+              </h1>
               <p className="text-base text-gray-600">
                 {currentProgress} of {sortedCards.length}
               </p>
@@ -163,7 +217,11 @@ export default function LessonCards({ lesson, subject, cards: initialCards }: Le
             <div className="w-full max-w-md md:max-w-lg bg-gray-200 rounded-full h-3 shadow-inner">
               <div
                 className="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full transition-all duration-300 shadow-sm"
-                style={{ width: `${Math.round((currentProgress / sortedCards.length) * 100)}%` }}
+                style={{
+                  width: `${Math.round(
+                    (currentProgress / sortedCards.length) * 100
+                  )}%`,
+                }}
               />
             </div>
           </div>
@@ -185,14 +243,14 @@ export default function LessonCards({ lesson, subject, cards: initialCards }: Le
             {/* Card Deck - Ultra Smooth Glassy Cards */}
             <div className="relative w-80 h-[480px] sm:w-96 sm:h-[580px] md:w-[26rem] md:h-[34rem]">
               {deckCards.map((card) => {
-                const cardColor = cardColors[card.order % cardColors.length]
-                const isTopCard = card.deckIndex === 0
+                const cardColor = cardColors[card.order % cardColors.length];
+                const isTopCard = card.deckIndex === 0;
 
                 // Ultra smooth stacking with perfect timing
-                const stackOffsetY = card.deckIndex * 20
-                const stackOffsetX = card.deckIndex * 6
-                const scaleReduction = card.deckIndex * 0.02
-                const opacityReduction = card.deckIndex * 0.15
+                const stackOffsetY = card.deckIndex * 20;
+                const stackOffsetX = card.deckIndex * 6;
+                const scaleReduction = card.deckIndex * 0.02;
+                const opacityReduction = card.deckIndex * 0.15;
 
                 return (
                   <div
@@ -207,7 +265,7 @@ export default function LessonCards({ lesson, subject, cards: initialCards }: Le
                       `,
                       opacity: Math.max(0.6, 1 - opacityReduction),
                       transition: isAnimating
-                        ? "all 0.35s cubic-bezier(0.23, 1, 0.32, 1)" // Ultra smooth for ALL cards during animation
+                        ? "all 0.35s cubic-bezier(0.23, 1, 0.32, 1)"
                         : "none",
                       transformOrigin: "center top",
                     }}
@@ -220,6 +278,7 @@ export default function LessonCards({ lesson, subject, cards: initialCards }: Le
                         onSwipeUp={moveToNextCard}
                         onSwipeDown={moveToNextCard}
                         className="w-full h-full"
+                        onDrag={(direction) => setSwipeDirection(direction)}
                       >
                         {/* Ultra Glassy Top Card */}
                         <div className="w-full h-full relative">
@@ -335,7 +394,6 @@ export default function LessonCards({ lesson, subject, cards: initialCards }: Le
                         </div>
                       </SwipeableCard>
                     ) : (
-                      /* Glassy Background Cards */
                       <div className="w-full h-full relative pointer-events-none">
                         {/* Subtle Background Shadows */}
                         <div
@@ -352,7 +410,6 @@ export default function LessonCards({ lesson, subject, cards: initialCards }: Le
                             background: "rgba(139, 92, 246, 0.08)",
                           }}
                         />
-
                         <Card
                           className="w-full h-full border-0 overflow-hidden rounded-3xl relative"
                           style={{
@@ -387,7 +444,6 @@ export default function LessonCards({ lesson, subject, cards: initialCards }: Le
                               pointerEvents: "none",
                             }}
                           />
-
                           <CardContent className="flex flex-col h-full p-6 md:p-8 relative z-10">
                             <div className="flex justify-center mb-6 md:mb-8">
                               <div
@@ -422,7 +478,7 @@ export default function LessonCards({ lesson, subject, cards: initialCards }: Le
                       </div>
                     )}
                   </div>
-                )
+                );
               })}
             </div>
 
@@ -439,5 +495,5 @@ export default function LessonCards({ lesson, subject, cards: initialCards }: Le
         </div>
       </div>
     </div>
-  )
+  );
 }
