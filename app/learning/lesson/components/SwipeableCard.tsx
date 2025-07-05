@@ -1,13 +1,10 @@
 "use client";
 
-import type React from "react";
-import {
-  useState,
+import React, {
   useRef,
-  useCallback,
-  useEffect,
-  forwardRef,
   useImperativeHandle,
+  forwardRef,
+  useState,
 } from "react";
 
 interface SwipeableCardProps {
@@ -24,6 +21,8 @@ export interface SwipeableCardRef {
   triggerSwipe: (direction: "left" | "right" | "up" | "down") => void;
 }
 
+const SWIPE_THRESHOLD = 80;
+
 const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(
   (
     {
@@ -38,299 +37,188 @@ const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(
     ref
   ) => {
     const cardRef = useRef<HTMLDivElement>(null);
-    const [isDragging, setIsDragging] = useState(false);
-    const [startPos, setStartPos] = useState({ x: 0, y: 0 });
-    const [currentPos, setCurrentPos] = useState({ x: 0, y: 0 });
-    const [velocity, setVelocity] = useState({ x: 0, y: 0 });
-    const [isAnimatingOut, setIsAnimatingOut] = useState(false);
-    const lastMoveTime = useRef(Date.now());
+    const pointerStart = useRef({ x: 0, y: 0 });
+    const [isAnimating, setIsAnimating] = useState(false);
 
-    const SWIPE_THRESHOLD = 100;
-    const VELOCITY_THRESHOLD = 0.5;
-
-    const updateCardPosition = useCallback(
-      (x: number, y: number) => {
-        if (cardRef.current && !isAnimatingOut) {
-          const rotation = x * 0.06; // Reduced for smoother feel
-          const opacity = Math.max(0.7, 1 - Math.abs(x) / 500); // Smoother opacity curve
-          cardRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rotation}deg)`;
-          cardRef.current.style.opacity = `${opacity}`;
-        }
-      },
-      [isAnimatingOut]
-    );
-
-    const resetCard = useCallback(() => {
-      if (cardRef.current && !isAnimatingOut) {
-        cardRef.current.style.transition =
-          "transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.2s ease-out";
-        cardRef.current.style.transform =
-          "translate3d(0px, 0px, 0) rotate(0deg)";
-        cardRef.current.style.opacity = "1";
-
-        setTimeout(() => {
-          if (cardRef.current) {
-            cardRef.current.style.transition = "";
-          }
-        }, 200);
+    // Drag start
+    const handlePointerDown = (e: React.PointerEvent) => {
+      if (isAnimating) return;
+      cardRef.current?.setPointerCapture(e.pointerId);
+      pointerStart.current = { x: e.clientX, y: e.clientY };
+      if (cardRef.current) {
+        cardRef.current.style.transition = "none";
       }
-    }, [isAnimatingOut]);
+    };
 
-    const removeCard = useCallback(
-      (direction: "left" | "right" | "up" | "down") => {
-        if (cardRef.current && !isAnimatingOut) {
-          setIsAnimatingOut(true);
+    // Drag move
+    const handlePointerMove = (e: React.PointerEvent) => {
+      if (isAnimating || e.pressure === 0) return;
+      const dx = e.clientX - pointerStart.current.x;
+      const dy = e.clientY - pointerStart.current.y;
+      if (cardRef.current) {
+        const rotation = dx * 0.08;
+        cardRef.current.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${rotation}deg) scale(1.02)`;
+        cardRef.current.style.opacity = `${Math.max(
+          0.7,
+          1 - Math.abs(dx) / 400
+        )}`;
+      }
+      // Optionally, call onDrag for direction feedback (unchanged logic)
+      if (onDrag && Math.abs(dx) > Math.abs(dy)) {
+        onDrag(dx > 0 ? "right" : "left");
+      }
+    };
 
-          const multiplier = 500;
-          let x = 0,
-            y = 0;
-
+    // Drag end
+    const handlePointerUp = (e: React.PointerEvent) => {
+      if (isAnimating) return;
+      cardRef.current?.releasePointerCapture(e.pointerId);
+      const dx = e.clientX - pointerStart.current.x;
+      const dy = e.clientY - pointerStart.current.y;
+      let swiped = false;
+      let direction: "left" | "right" | "up" | "down" | null = null;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_THRESHOLD) {
+        direction = dx > 0 ? "right" : "left";
+        swiped = true;
+      } else if (Math.abs(dy) > SWIPE_THRESHOLD) {
+        direction = dy > 0 ? "down" : "up";
+        swiped = true;
+      }
+      if (swiped && direction) {
+        setIsAnimating(true);
+        let x = 0,
+          y = 0,
+          rotation = 0;
+        const multiplier = 400;
+        switch (direction) {
+          case "left":
+            x = -multiplier;
+            rotation = -15;
+            break;
+          case "right":
+            x = multiplier;
+            rotation = 15;
+            break;
+          case "up":
+            y = -multiplier;
+            break;
+          case "down":
+            y = multiplier;
+            break;
+        }
+        if (cardRef.current) {
+          cardRef.current.style.transition =
+            "transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.4s";
+          cardRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rotation}deg) scale(0.95)`;
+          cardRef.current.style.opacity = "0";
+        }
+        setTimeout(() => {
+          setIsAnimating(false);
+          if (cardRef.current) {
+            cardRef.current.style.transition = "none";
+            cardRef.current.style.transform =
+              "translate3d(0px, 0px, 0) rotate(0deg) scale(1)";
+            cardRef.current.style.opacity = "1";
+          }
           switch (direction) {
             case "left":
-              x = -multiplier;
+              onSwipeLeft?.();
               break;
             case "right":
-              x = multiplier;
+              onSwipeRight?.();
               break;
             case "up":
-              y = -multiplier;
+              onSwipeUp?.();
               break;
             case "down":
-              y = multiplier;
+              onSwipeDown?.();
               break;
           }
-
-          // Ultra smooth exit animation
-          cardRef.current.style.transition =
-            "transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.35s ease-out";
-          cardRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${
-            x * 0.06
-          }deg)`;
-          cardRef.current.style.opacity = "0";
-
-          // Perfectly timed callback for seamless card appearance
-          setTimeout(() => {
-            // Call the appropriate callback
-            switch (direction) {
-              case "left":
-                onSwipeLeft?.();
-                break;
-              case "right":
-                onSwipeRight?.();
-                break;
-              case "up":
-                onSwipeUp?.();
-                break;
-              case "down":
-                onSwipeDown?.();
-                break;
-            }
-
-            // Instant reset for next card
-            setTimeout(() => {
-              if (cardRef.current) {
-                cardRef.current.style.transform =
-                  "translate3d(0px, 0px, 0) rotate(0deg)";
-                cardRef.current.style.opacity = "1";
-                cardRef.current.style.transition = "";
-              }
-              setIsAnimatingOut(false);
-            }, 15); // Slightly longer for perfect timing
-          }, 350); // Match the transition duration
-        }
-      },
-      [onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown, isAnimatingOut]
-    );
-
-    // Expose triggerSwipe method via ref
-    useImperativeHandle(ref, () => ({
-      triggerSwipe: removeCard,
-    }));
-
-    const handleStart = useCallback(
-      (clientX: number, clientY: number) => {
-        if (isAnimatingOut) return;
-
-        setIsDragging(true);
-        setStartPos({ x: clientX, y: clientY });
-        setCurrentPos({ x: 0, y: 0 });
-        lastMoveTime.current = Date.now();
-
-        if (cardRef.current) {
-          cardRef.current.style.transition = "";
-        }
-      },
-      [isAnimatingOut]
-    );
-
-    const handleMove = useCallback(
-      (clientX: number, clientY: number) => {
-        if (!isDragging || isAnimatingOut) return;
-
-        const now = Date.now();
-        const deltaTime = now - lastMoveTime.current;
-
-        if (deltaTime > 0) {
-          const newX = clientX - startPos.x;
-          const newY = clientY - startPos.y;
-
-          const velocityX = (newX - currentPos.x) / deltaTime;
-          const velocityY = (newY - currentPos.y) / deltaTime;
-
-          setVelocity({ x: velocityX, y: velocityY });
-          setCurrentPos({ x: newX, y: newY });
-
-          updateCardPosition(newX, newY);
-          lastMoveTime.current = now;
-
-          // Report drag direction to parent
-          if (Math.abs(newX) > Math.abs(newY)) {
-            if (newX < 0) {
-              // Dragging left
-              if (typeof onDrag === "function") {
-                onDrag("left");
-              }
-            } else if (newX > 0) {
-              // Dragging right
-              if (typeof onDrag === "function") {
-                onDrag("right");
-              }
-            }
-          }
-        }
-      },
-      [isDragging, startPos, currentPos, updateCardPosition, isAnimatingOut]
-    );
-
-    const handleEnd = useCallback(() => {
-      if (!isDragging || isAnimatingOut) return;
-
-      setIsDragging(false);
-
-      const absX = Math.abs(currentPos.x);
-      const absY = Math.abs(currentPos.y);
-      const absVelX = Math.abs(velocity.x);
-      const absVelY = Math.abs(velocity.y);
-
-      // Check if swipe threshold or velocity threshold is met
-      if (absX > SWIPE_THRESHOLD || absVelX > VELOCITY_THRESHOLD) {
-        if (currentPos.x > 0) {
-          removeCard("right");
-        } else {
-          removeCard("left");
-        }
-      } else if (absY > SWIPE_THRESHOLD || absVelY > VELOCITY_THRESHOLD) {
-        if (currentPos.y > 0) {
-          removeCard("down");
-        } else {
-          removeCard("up");
-        }
+        }, 400);
       } else {
-        resetCard();
+        // Snap back
+        if (cardRef.current) {
+          cardRef.current.style.transition =
+            "transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.3s";
+          cardRef.current.style.transform =
+            "translate3d(0px, 0px, 0) rotate(0deg) scale(1)";
+          cardRef.current.style.opacity = "1";
+        }
       }
-    }, [
-      isDragging,
-      currentPos,
-      velocity,
-      removeCard,
-      resetCard,
-      isAnimatingOut,
-    ]);
+    };
 
-    // Mouse events
-    const handleMouseDown = useCallback(
-      (e: React.MouseEvent) => {
-        if (isAnimatingOut) return;
-        e.preventDefault();
-        handleStart(e.clientX, e.clientY);
+    // Expose triggerSwipe to parent
+    useImperativeHandle(ref, () => ({
+      triggerSwipe: (direction) => {
+        if (isAnimating) return;
+        setIsAnimating(true);
+        let x = 0,
+          y = 0,
+          rotation = 0;
+        const multiplier = 400;
+        switch (direction) {
+          case "left":
+            x = -multiplier;
+            rotation = -15;
+            break;
+          case "right":
+            x = multiplier;
+            rotation = 15;
+            break;
+          case "up":
+            y = -multiplier;
+            break;
+          case "down":
+            y = multiplier;
+            break;
+        }
+        if (cardRef.current) {
+          cardRef.current.style.transition =
+            "transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.4s";
+          cardRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rotation}deg) scale(0.95)`;
+          cardRef.current.style.opacity = "0";
+        }
+        setTimeout(() => {
+          setIsAnimating(false);
+          if (cardRef.current) {
+            cardRef.current.style.transition = "none";
+            cardRef.current.style.transform =
+              "translate3d(0px, 0px, 0) rotate(0deg) scale(1)";
+            cardRef.current.style.opacity = "1";
+          }
+          switch (direction) {
+            case "left":
+              onSwipeLeft?.();
+              break;
+            case "right":
+              onSwipeRight?.();
+              break;
+            case "up":
+              onSwipeUp?.();
+              break;
+            case "down":
+              onSwipeDown?.();
+              break;
+          }
+        }, 400);
       },
-      [handleStart, isAnimatingOut]
-    );
-
-    const handleMouseMove = useCallback(
-      (e: MouseEvent) => {
-        e.preventDefault();
-        handleMove(e.clientX, e.clientY);
-      },
-      [handleMove]
-    );
-
-    const handleMouseUp = useCallback(
-      (e: MouseEvent) => {
-        e.preventDefault();
-        handleEnd();
-      },
-      [handleEnd]
-    );
-
-    // Touch events
-    const handleTouchStart = useCallback(
-      (e: React.TouchEvent) => {
-        if (isAnimatingOut) return;
-        const touch = e.touches[0];
-        handleStart(touch.clientX, touch.clientY);
-      },
-      [handleStart, isAnimatingOut]
-    );
-
-    const handleTouchMove = useCallback(
-      (e: TouchEvent) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        handleMove(touch.clientX, touch.clientY);
-      },
-      [handleMove]
-    );
-
-    const handleTouchEnd = useCallback(
-      (e: TouchEvent) => {
-        e.preventDefault();
-        handleEnd();
-      },
-      [handleEnd]
-    );
-
-    useEffect(() => {
-      if (isDragging && !isAnimatingOut) {
-        document.addEventListener("mousemove", handleMouseMove, {
-          passive: false,
-        });
-        document.addEventListener("mouseup", handleMouseUp, { passive: false });
-        document.addEventListener("touchmove", handleTouchMove, {
-          passive: false,
-        });
-        document.addEventListener("touchend", handleTouchEnd, {
-          passive: false,
-        });
-      }
-
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-        document.removeEventListener("touchmove", handleTouchMove);
-        document.removeEventListener("touchend", handleTouchEnd);
-      };
-    }, [
-      isDragging,
-      handleMouseMove,
-      handleMouseUp,
-      handleTouchMove,
-      handleTouchEnd,
-      isAnimatingOut,
-    ]);
+    }));
 
     return (
       <div
         ref={cardRef}
-        className={`cursor-grab active:cursor-grabbing select-none ${className}`}
+        className={`relative select-none ${className}`}
         style={{
-          willChange: "transform, opacity",
           touchAction: "none",
+          willChange: "transform",
           backfaceVisibility: "hidden",
           perspective: "1000px",
+          transformStyle: "preserve-3d",
         }}
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleTouchStart}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
       >
         {children}
       </div>
