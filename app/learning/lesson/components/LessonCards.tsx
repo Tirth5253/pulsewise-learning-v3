@@ -121,11 +121,11 @@ export default function LessonCards({
   }, []);
 
   const cardColors = [
-    "from-blue-500 to-blue-600",
-    "from-purple-500 to-purple-600",
-    "from-pink-500 to-pink-600",
-    "from-indigo-500 to-indigo-600",
-    "from-cyan-500 to-cyan-600",
+    "from-purple-400 to-purple-200",
+    "from-blue-400 to-blue-200",
+    "from-pink-400 to-pink-200",
+    "from-indigo-400 to-indigo-200",
+    "from-cyan-400 to-cyan-200",
   ];
 
   // Create deck of cards - dynamically based on swipe direction
@@ -168,7 +168,7 @@ export default function LessonCards({
   const currentProgress = currentCardIndex + 1;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex flex-col overflow-hidden">
       {/* Sidebar */}
       <Sidebar
         currentSubject={allSubjects.find((s) => s.id === subject.id)!}
@@ -280,202 +280,71 @@ export default function LessonCards({
                         className="w-full h-full"
                         onDrag={(direction) => setSwipeDirection(direction)}
                       >
-                        {/* Ultra Glassy Top Card */}
-                        <div className="w-full h-full relative">
-                          {/* Subtle Aesthetic Shadows */}
+                        {/* Tinder Style Top Card */}
+                        <Card className="relative w-full h-full flex flex-col items-center justify-center bg-white/70 backdrop-blur-xl border-0 shadow-xl rounded-3xl transition-all duration-300 select-none">
+                          {/* Glow border */}
                           <div
-                            className="absolute inset-0 rounded-3xl transform translate-y-6 translate-x-3 blur-2xl"
+                            className="absolute inset-0 rounded-3xl pointer-events-none z-10"
                             style={{
-                              zIndex: -3,
-                              background: "rgba(139, 92, 246, 0.08)",
+                              boxShadow: `0 0 0 4px rgba(168, 85, 247, 0.15), 0 0 32px 8px rgba(168, 85, 247, 0.12)`,
                             }}
                           />
-                          <div
-                            className="absolute inset-0 rounded-3xl transform translate-y-4 translate-x-2 blur-xl"
-                            style={{
-                              zIndex: -2,
-                              background: "rgba(139, 92, 246, 0.12)",
-                            }}
-                          />
-                          <div
-                            className="absolute inset-0 rounded-3xl transform translate-y-2 translate-x-1 blur-lg"
-                            style={{
-                              zIndex: -1,
-                              background: "rgba(139, 92, 246, 0.15)",
-                            }}
-                          />
-
-                          {/* Ultra Glassy Main Card */}
-                          <Card
-                            className="w-full h-full border-0 overflow-hidden rounded-3xl relative"
-                            style={{
-                              background: `
-                                linear-gradient(145deg, 
-                                  rgba(255, 255, 255, 0.95) 0%, 
-                                  rgba(255, 255, 255, 0.85) 50%, 
-                                  rgba(255, 255, 255, 0.9) 100%
-                                )
-                              `,
-                              backdropFilter: "blur(20px) saturate(180%)",
-                              WebkitBackdropFilter: "blur(20px) saturate(180%)",
-                              boxShadow: `
-                                0 25px 45px -10px rgba(139, 92, 246, 0.15),
-                                0 10px 20px -5px rgba(139, 92, 246, 0.1),
-                                0 0 0 1px rgba(255, 255, 255, 0.2),
-                                inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                                inset 0 -1px 0 rgba(139, 92, 246, 0.05)
-                              `,
-                              transform: "translateZ(0)",
-                              backfaceVisibility: "hidden",
-                            }}
-                          >
-                            {/* Glassy Overlay Effect */}
+                          <CardContent className="flex flex-col items-center justify-center h-full z-20">
+                            {/* Icon */}
                             <div
-                              className="absolute inset-0 rounded-3xl"
-                              style={{
-                                background: `
-                                  linear-gradient(135deg, 
-                                    rgba(255, 255, 255, 0.4) 0%, 
-                                    rgba(255, 255, 255, 0.1) 30%,
-                                    transparent 50%, 
-                                    rgba(139, 92, 246, 0.02) 100%
-                                  )
-                                `,
-                                pointerEvents: "none",
-                              }}
-                            />
-
-                            {/* Glass Reflection */}
-                            <div
-                              className="absolute top-0 left-0 right-0 h-1/3 rounded-t-3xl"
-                              style={{
-                                background: `
-                                  linear-gradient(180deg, 
-                                    rgba(255, 255, 255, 0.3) 0%, 
-                                    rgba(255, 255, 255, 0.1) 50%,
-                                    transparent 100%
-                                  )
-                                `,
-                                pointerEvents: "none",
-                              }}
-                            />
-
-                            <CardContent className="flex flex-col h-full p-6 md:p-8 relative z-10">
-                              <div className="flex justify-center mb-6 md:mb-8">
-                                <div
-                                  className={`w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br ${cardColor} rounded-full p-4 md:p-5 flex items-center justify-center relative`}
-                                  style={{
-                                    boxShadow: `
-                                      0 10px 25px -5px rgba(139, 92, 246, 0.2),
-                                      0 4px 10px -2px rgba(139, 92, 246, 0.1),
-                                      inset 0 1px 0 rgba(255, 255, 255, 0.3)
-                                    `,
-                                  }}
-                                >
-                                  <Image
-                                    src={card.image || "/placeholder.svg"}
-                                    alt=""
-                                    width={56}
-                                    height={56}
-                                    className="w-full h-full object-contain filter brightness-0 invert drop-shadow-sm"
-                                  />
-                                </div>
-                              </div>
-                              <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center leading-tight text-gray-900">
-                                {card.question}
-                              </h2>
-                              <div className="flex-1 flex items-center">
-                                <p className="text-base md:text-lg text-gray-700 leading-relaxed text-center">
-                                  {card.answer}
-                                </p>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </div>
-                      </SwipeableCard>
-                    ) : (
-                      <div className="w-full h-full relative pointer-events-none">
-                        {/* Subtle Background Shadows */}
-                        <div
-                          className="absolute inset-0 rounded-3xl transform translate-y-4 translate-x-2 blur-xl"
-                          style={{
-                            zIndex: -2,
-                            background: "rgba(139, 92, 246, 0.06)",
-                          }}
-                        />
-                        <div
-                          className="absolute inset-0 rounded-3xl transform translate-y-2 translate-x-1 blur-lg"
-                          style={{
-                            zIndex: -1,
-                            background: "rgba(139, 92, 246, 0.08)",
-                          }}
-                        />
-                        <Card
-                          className="w-full h-full border-0 overflow-hidden rounded-3xl relative"
-                          style={{
-                            background: `
-                              linear-gradient(145deg, 
-                                rgba(255, 255, 255, 0.9) 0%, 
-                                rgba(255, 255, 255, 0.8) 50%, 
-                                rgba(255, 255, 255, 0.85) 100%
-                              )
-                            `,
-                            backdropFilter: "blur(15px) saturate(150%)",
-                            WebkitBackdropFilter: "blur(15px) saturate(150%)",
-                            boxShadow: `
-                              0 20px 35px -8px rgba(139, 92, 246, 0.12),
-                              0 8px 15px -4px rgba(139, 92, 246, 0.08),
-                              0 0 0 1px rgba(255, 255, 255, 0.15),
-                              inset 0 1px 0 rgba(255, 255, 255, 0.25)
-                            `,
-                          }}
-                        >
-                          <div
-                            className="absolute inset-0 rounded-3xl"
-                            style={{
-                              background: `
-                                linear-gradient(135deg, 
-                                  rgba(255, 255, 255, 0.3) 0%, 
-                                  rgba(255, 255, 255, 0.05) 30%,
-                                  transparent 50%, 
-                                  rgba(139, 92, 246, 0.01) 100%
-                                )
-                              `,
-                              pointerEvents: "none",
-                            }}
-                          />
-                          <CardContent className="flex flex-col h-full p-6 md:p-8 relative z-10">
-                            <div className="flex justify-center mb-6 md:mb-8">
-                              <div
-                                className={`w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br ${cardColor} rounded-full p-4 md:p-5 flex items-center justify-center`}
-                                style={{
-                                  boxShadow: `
-                                    0 8px 20px -4px rgba(139, 92, 246, 0.15),
-                                    0 3px 8px -2px rgba(139, 92, 246, 0.08),
-                                    inset 0 1px 0 rgba(255, 255, 255, 0.25)
-                                  `,
-                                }}
-                              >
-                                <Image
-                                  src={card.image || "/placeholder.svg"}
-                                  alt=""
-                                  width={56}
-                                  height={56}
-                                  className="w-full h-full object-contain filter brightness-0 invert"
-                                />
-                              </div>
+                              className={`flex items-center justify-center mb-6 mt-2 w-16 h-16 rounded-full bg-gradient-to-br ${cardColor} bg-opacity-20 shadow-inner border border-purple-200`}
+                            >
+                              <Image
+                                src={card.image || "/placeholder.svg"}
+                                alt=""
+                                width={40}
+                                height={40}
+                                className="w-10 h-10 object-contain filter brightness-0 invert opacity-80"
+                              />
                             </div>
-                            <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center leading-tight text-gray-900">
+                            {/* Question */}
+                            <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-4 leading-tight">
                               {card.question}
                             </h2>
-                            <div className="flex-1 flex items-center">
-                              <p className="text-base md:text-lg text-gray-700 leading-relaxed text-center">
-                                {card.answer}
-                              </p>
-                            </div>
+                            {/* Answer */}
+                            <p className="text-base sm:text-lg text-gray-700 text-center leading-relaxed opacity-90">
+                              {card.answer}
+                            </p>
                           </CardContent>
                         </Card>
-                      </div>
+                      </SwipeableCard>
+                    ) : (
+                      <Card className="relative w-full h-full flex flex-col items-center justify-center bg-white/70 backdrop-blur-xl border-0 shadow-xl rounded-3xl transition-all duration-300 select-none">
+                        {/* Glow border */}
+                        <div
+                          className="absolute inset-0 rounded-3xl pointer-events-none z-10"
+                          style={{
+                            boxShadow: `0 0 0 4px rgba(168, 85, 247, 0.15), 0 0 32px 8px rgba(168, 85, 247, 0.12)`,
+                          }}
+                        />
+                        <CardContent className="flex flex-col items-center justify-center h-full z-20">
+                          {/* Icon */}
+                          <div
+                            className={`flex items-center justify-center mb-6 mt-2 w-16 h-16 rounded-full bg-gradient-to-br ${cardColor} bg-opacity-20 shadow-inner border border-purple-200`}
+                          >
+                            <Image
+                              src={card.image || "/placeholder.svg"}
+                              alt=""
+                              width={40}
+                              height={40}
+                              className="w-10 h-10 object-contain filter brightness-0 invert opacity-80"
+                            />
+                          </div>
+                          {/* Question */}
+                          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-4 leading-tight">
+                            {card.question}
+                          </h2>
+                          {/* Answer */}
+                          <p className="text-base sm:text-lg text-gray-700 text-center leading-relaxed opacity-90">
+                            {card.answer}
+                          </p>
+                        </CardContent>
+                      </Card>
                     )}
                   </div>
                 );

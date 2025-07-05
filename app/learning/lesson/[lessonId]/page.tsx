@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import LessonCards from "../components/LessonCards";
+import SwipeCards from "../components/SwipeCards";
 import learningData from "../../../../data/learning-data.json";
 
 interface Props {
   params: { lessonId: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -35,8 +37,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function LessonPage({ params }: Props) {
+export default async function LessonPage({ params, searchParams }: Props) {
   const awaitedParams = await params;
+  const awaitedSearchParams = await searchParams;
   const lesson = learningData.lessons.find(
     (l) => l.id === awaitedParams.lessonId
   );
@@ -49,6 +52,27 @@ export default async function LessonPage({ params }: Props) {
 
   if (!lesson || !subject) {
     notFound();
+  }
+
+  // Check if we should use the new swipe-style cards
+  const useSwipeCards =
+    awaitedSearchParams.swipe === "true" ||
+    process.env.NEXT_PUBLIC_USE_SWIPE_CARDS === "true";
+
+  if (useSwipeCards) {
+    return (
+      <SwipeCards
+        lesson={lesson}
+        subject={subject}
+        cards={cards.sort((a, b) => a.order - b.order)}
+        onCardComplete={(cardId: string, direction: "left" | "right") => {
+          console.log(`Card ${cardId} completed with direction: ${direction}`);
+        }}
+        onAllCardsComplete={() => {
+          console.log("All cards completed!");
+        }}
+      />
+    );
   }
 
   return (
